@@ -1,11 +1,11 @@
 # NodeApi
 
-1. First, create package.json file.
+## 1. First, create package.json file.
 ```
 npm init
 ```
 
-2. Packages install.
+## 2. Packages install.
 ```
 npm i morgan --save
 npm i mongoose --save
@@ -40,4 +40,9 @@ As a result package.json file
     "body-parser": "~1.12.4"
   }
 }
+```
+
+## 3. Run
+```
+node server.js
 ```
