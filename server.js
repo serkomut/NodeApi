@@ -7,6 +7,7 @@ var mongoose = require("mongoose");
 var jwt = require("jsonwebtoken");
 var config = require("./config");
 var User = require('./app/models/user');
+var ProfileRoute = require('./app/profile/index');
 
 var port = process.env.PORT || 8080;
 
@@ -24,7 +25,7 @@ app.post('/setup', function(req, res){
 		password: req.body.password,
 		email: req.body.email,
 	});
-	
+
 	User.findOne({username: userFirst.username},
 		function(err, user) {
 			if (err) throw err;
@@ -46,7 +47,7 @@ app.post('/setup', function(req, res){
 
 //basic
 app.get('/', function(req, res){
-  res.send('Wellcome http://localhost:'+port+'/api');
+  res.send('Wellcome http://localhost:'+port+'/v1');
 });
 
 app.route('/test').get(function(req, res){
@@ -55,6 +56,7 @@ app.route('/test').get(function(req, res){
 
 var apiRoutes = express.Router();
 
+ProfileRoute(apiRoutes, app);
 
 apiRoutes.post('/authenticate', function(req, res) {
 	User.findOne({username: req.body.username},
@@ -66,7 +68,17 @@ apiRoutes.post('/authenticate', function(req, res) {
 				if (user.password != req.body.password) {
 					res.json({ success: false, message: 'Kimlik doğrulama başarısız oldu. Yanlış şifre.' });
 				} else {
-					var token = jwt.sign(user, app.get('secret'), {
+					var date = new Date();
+					var userJwtSing = {
+						id: user._id,
+						username: user.username,
+						iss:'http://localhost:3000',
+						aud:'http://api.domain.com',
+						exp: date.setDate(date.getDate() + 1),
+						roles:[]
+					};
+
+					var token = jwt.sign(userJwtSing, app.get('secret'), {
 						expiresInMinutes: 1440 // 24 saat
 					});
 					res.json({
@@ -81,10 +93,10 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 
 apiRoutes.use(function(req, res, next) {
-	var token = req.body.token || req.param('access_token') || req.headers['access_token'];
+	var token = req.body.token || req.param('access_token') || req.headers['authentication'];
+	token = token.split(' ')[1];
 	if (token) {
-		jwt.verify(token,
-			app.get('secret'), function(err, decoded) {	
+		jwt.verify(token, app.get('secret'), function(err, decoded) {	
 			if (err) {
 				return res.json({ success: false, message: 'Failed to authenticate token.' });	
 			} else {
@@ -111,7 +123,7 @@ apiRoutes.get('/check', function(req, res) {
 	res.json(req.decoded);
 });
 
-app.use('/api', apiRoutes);
+app.use('/v1', apiRoutes);
 
 app.listen(port);
 console.log('Start >> http://localhost:'+port);
