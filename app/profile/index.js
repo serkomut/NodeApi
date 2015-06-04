@@ -5,6 +5,18 @@ var Profile = require('../models/profile');
 module.exports = ProfileRoute;
 
 function ProfileRoute(apiRoutes, app){
+
+	app.param(function(param, option) {
+	  return function (req, res, next, val) {
+	    if (val == option) {
+	      next();
+	    }
+	    else {
+	      res.sendStatus(403);
+	    }
+	  }
+	});
+
 	apiRoutes.post('/profile', function(req, res){
 		var token = req.headers['authentication'].split(' ')[1];
 
@@ -23,5 +35,16 @@ function ProfileRoute(apiRoutes, app){
 				console.log('User Profile saved successfully');
 			});
 		};
+	});
+
+	apiRoutes.get('/profile/:id', function(req, res, next){
+		Profile.findOne({userId: req.params.id}, function(err, profile){
+			if (err) {
+				return res.json({success: false, message: 'Not found profile.'});;
+			}else if (profile) {
+			 	return res.json(profile);
+			}
+			//next();
+		});
 	});
 };

@@ -38,12 +38,6 @@ app.route('/test').get(function(req, res){
 	res.json({message: 'Test route'});
 });
 
-
-
-
-
-
-
 apiRoutes.get('/users', function(req, res) {
 	User.find({}, function(err, users) {
 		res.json(users);
