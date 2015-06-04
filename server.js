@@ -18,21 +18,31 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-app.get('/setup', function(req, res){
+app.post('/setup', function(req, res){
 	var userFirst = new User({
-		name : 'serkomut',
-		password: 'password',
-		admin: true,
-		firstName: 'Serol',
-		lastName : 'Guzel'	
+		username : req.body.username,
+		password: req.body.password,
+		email: req.body.email,
 	});
+	
+	User.findOne({username: userFirst.username},
+		function(err, user) {
+			if (err) throw err;
+			if (!user || err) {
+				userFirst.save(function(err){
+					if (err) throw err;
+					console.log('User saved successfully');
+				});
+			} else if (user) {
+				if (user.username != userFirst.username) {
+					res.json({ success: false, message: 'Bu kullanici adiyla zaten bir kayit var.' });
+				} else if (user.email == userFirst.email) {
+					res.json({ success: false, message: 'Bu kullanici adiyla zaten bir kayit var.' });
+				};
+			}
+		});
 
-	userFirst.save(function(err){
-		if (err) throw err;
-		console.log('User saved successfully');
-	});
 });
-
 
 //basic
 app.get('/', function(req, res){
@@ -47,7 +57,7 @@ var apiRoutes = express.Router();
 
 
 apiRoutes.post('/authenticate', function(req, res) {
-	User.findOne({name: req.body.name},
+	User.findOne({username: req.body.username},
 		function(err, user) {
 			if (err) throw err;
 			if (!user) {
@@ -71,7 +81,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 
 apiRoutes.use(function(req, res, next) {
-	var token = req.body.token || req.param('token') || req.headers['access_token'];
+	var token = req.body.token || req.param('access_token') || req.headers['access_token'];
 	if (token) {
 		jwt.verify(token,
 			app.get('secret'), function(err, decoded) {	
