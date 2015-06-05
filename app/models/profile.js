@@ -25,4 +25,5 @@ var Adress = new Schema({
 var Pictures = new Schema({
 	isDefault : Boolean,
 	imageUrl: String,
+	size: Number
 });
