@@ -1,21 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Adress = new Schema();
-
-var Pictures = new Schema({
-	isDefault : Boolean,
-	imageUrl: String,
-	size: Number
-});
-
-module.exports = mongoose.model('Profile', new Schema({
-	userId: String,
-	firstName: String,
-	lastName : String,
-	birthDay: String,
-	pictures: [Pictures],
-	adress: {
+var Adress = {
 		street: String,
 		streetNumber:String,
 		zipCode: String,
@@ -25,6 +11,20 @@ module.exports = mongoose.model('Profile', new Schema({
 			latitude:String,
 			longtitude:String
 		}
-	}
+	};
+
+var Pictures = {
+	isDefault : Boolean,
+	imageUrl: String,
+	size: Number
+};
+
+module.exports = mongoose.model('Profile', new Schema({
+	userId: String,
+	firstName: String,
+	lastName : String,
+	birthDay: String,
+	pictures: [Pictures],
+	adress: Adress
 }));
 

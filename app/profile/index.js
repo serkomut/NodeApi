@@ -21,6 +21,7 @@ function ProfileRoute(apiRoutes, app){
 		var token = req.headers['authentication'].split(' ')[1];
 
 		var userToken = jwt.verify(token, app.get('secret'));
+		console.log(req.body.pictures);
 
 		if (token) {
 			var userProfile = new Profile({
@@ -28,7 +29,7 @@ function ProfileRoute(apiRoutes, app){
 				firstName: req.body.firstName,
 				lastName : req.body.lastName,
 				birthDay: req.body.birthDay,
-				pictures:[req.body.picture],
+				pictures :req.body.pictures,
 				adress: req.body.adress
 			});
 			userProfile.save(function(err){
@@ -48,4 +49,35 @@ function ProfileRoute(apiRoutes, app){
 			//next();
 		});
 	});
+};
+
+var mock = {
+	"firstName": "firstName",
+	"lastName": "lastName",
+	"birthDay": "birthDay",
+	"pictures":mockPiscs,
+	"adress":mockAddress
+};
+
+var mockPiscs = [{
+	"isDefault" : true,
+	"imageUrl": "String",
+	"size": 240
+},
+{
+	"isDefault" : false,
+	"imageUrl": "String",
+	"size": 340
+}];
+
+var mockAddress = {
+	"street": "String",
+		"streetNumber":"String",
+		"zipCode": "String",
+		"cityName": "String",
+		"countryCode": "String",
+		"geoCode":{
+			"latitude":"String",
+			"longtitude":"String"
+		}
 };
