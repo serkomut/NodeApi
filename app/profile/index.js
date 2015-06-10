@@ -28,7 +28,8 @@ function ProfileRoute(apiRoutes, app){
 				firstName: req.body.firstName,
 				lastName : req.body.lastName,
 				birthDay: req.body.birthDay,
-				picture: req.body.picture
+				pictures:[req.body.picture],
+				adress: req.body.adress
 			});
 			userProfile.save(function(err){
 				if(err) throw err;
