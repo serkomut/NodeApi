@@ -1,4 +1,12 @@
-# NodeApi
+# SasturdayCoding.Api
+
+## Messages
+| Message | Type | Description |
+| -------- | ----- | ----------|
+| /v1/authenticate | Post | |
+| /v1/profile | Post | |
+| /v1/profile:id | GET | |
+
 
 ## 1. First, create package.json file.
 ```
