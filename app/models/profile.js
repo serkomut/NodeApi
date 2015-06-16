@@ -27,4 +27,3 @@ module.exports = mongoose.model('Profile', new Schema({
 	pictures: [Pictures],
 	adress: Adress
 }));
-

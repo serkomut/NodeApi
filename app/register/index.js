@@ -7,7 +7,7 @@ function Register (app) {
 		var userFirst = new User({
 			username : req.body.username,
 			password: req.body.password,
-			email: req.body.email,
+			email: req.body.username,
 			roles : req.body.roles
 		});
 		if (userFirst.roles === undefined) {
