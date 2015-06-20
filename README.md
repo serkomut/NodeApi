@@ -3,10 +3,10 @@
 ## Messages
 | Message | Type | Description |
 | -------- | ----- | ----------|
-| /v1/register | POST | |
-| /v1/authenticate | POST | |
-| /v1/profile | POST | |
-| /v1/profile:id | GET | |
+| /v1/register | `POST`| |
+| /v1/authenticate | `POST` | |
+| /v1/profile | `POST` | |
+| /v1/profile:id | `GET` | |
 
 
 ## 1. First, create package.json file.
