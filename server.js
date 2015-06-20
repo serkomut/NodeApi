@@ -5,7 +5,7 @@ var morgan = require("morgan");
 var mongoose = require("mongoose");
 
 var jwt = require("jsonwebtoken");
-var config = require("./config");
+var config = require("./repository/config");
 
 var Register = require('./app/register/index');
 var Authentication = require('./app/authentication/index');
