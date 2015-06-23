@@ -8,7 +8,7 @@ function Register(app) {
         if (req.body.roles === undefined) {
             req.body.roles = ['user'];
         };
-
+        
         User.findOne({ username: req.body.username },
             function (err, user) {
                 if (err) res.send(err);
@@ -20,11 +20,17 @@ function Register(app) {
                                 res.json(200,{ success: true, message: 'Kayit Basarili' });
                             });
                         } else {
-                            res.json(500,{ success: false, error: 'Bu Email adiyla zaten bir kayit var.' });
+                            return res.status(403).send({
+                                success: false,
+                                message: 'Bu Email adiyla zaten bir kayit var.'
+                            });
                         }
                     });
                 } else {
-                    res.json(500,{ success: false, error: 'Bu kullanici adiyla zaten bir kayit var.' });
+                    return res.status(403).send({
+                        success: false,
+                        message: 'Bu kullanici adiyla zaten bir kayit var.'
+                    });
                 }
             });
     });

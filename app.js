@@ -16,11 +16,11 @@ var app = express();
 var config = require("./config");
 
 mongoose.connect(config.database);
-var app = express();
+app.set('secret', config.secret);
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(multer());
 
@@ -30,7 +30,29 @@ if ('development' == app.get('env')) {
     app.use(errorHandler());
 }
 
-require('./routes.js')( app);
+var apiRoutes = express.Router();
+
+apiRoutes.use(function (req, res, next) {
+    var token = req.body.token || req.param('token') || req.headers['x-access-token'];
+    if (token) {
+        jwt.verify(token, app.get('secret'), function (err, decoded) {
+            if (err) {
+                return res.json({ success: false, message: 'Failed to authenticate token.' });
+            } else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+    }
+});
+app.use('/api', apiRoutes);
+
+require('./routes.js')(app);
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function () {

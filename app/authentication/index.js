@@ -3,8 +3,8 @@ var User = require('../models/user');
 
 module.exports = Authentication;
 
-function Authentication(apiRoutes, app) {
-    apiRoutes.post('/authenticate', function (req, res) {
+function Authentication(app) {
+    app.post('/authenticate', function (req, res) {
         User.findOne({ username: req.body.username },
 			function (err, user) {
 			    if (err) throw err;
@@ -37,7 +37,7 @@ function Authentication(apiRoutes, app) {
 			});
     });
 
-    apiRoutes.use(function (req, res, next) {
+    app.use(function (req, res, next) {
         var token = req.body.token || req.query.access_token || req.headers.authorization;
         token = token.split(' ')[1];
         if (token) {
