@@ -40,7 +40,7 @@ function ProfileRoute(apiRoutes, app){
 	});
 
 	apiRoutes.get('/profile/:id', function(req, res, next){
-		Profile.findOne({userId: req.params.id}, function(err, profile){
+		Profile.findOne({userId: req.query.id}, function(err, profile){
 			if (err) {
 				return res.json({success: false, message: 'Not found profile.'});;
 			}else if (profile) {
