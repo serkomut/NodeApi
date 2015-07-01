@@ -11,7 +11,6 @@ module.exports = mongoose.model('Companies', new Schema({
     emails : Email
 }));
 
-
 var Adress = {
     street: String,
     streetNumber: String,
