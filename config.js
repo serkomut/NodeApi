@@ -1,4 +1,4 @@
 module.exports = {
-	"secret":"saturdaycoding",
+	'secret':'saturdaycoding',
 	'database':'mongodb://localhost/NodeApi'
 };
